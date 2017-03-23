@@ -30,7 +30,7 @@ def getRUT(iterator):
 	url = url + 'get_generic_ajax/'
 
 	data = {
-		'entrada': entrada,
+		'entrada': nombre,
 		'csrfmiddlewaretoken': csrftoken,
 		}
 	headers = {
@@ -45,25 +45,22 @@ def getRUT(iterator):
 		time.sleep(5)
 		print("Nice, ahora sigamos...")
 		response = client.post(url, data=data, headers=headers)
-		results=[]
-		if response.json()['status']=='success':
-			for x in response.json()['value']:
-				dist=distance.levenshtein(nombre,x['name'])
-				results.append((x['name'],dist,x['rut']))
-			distances=sorted(results, key=lambda palabra: palabra[1])
-			if len(distances)!=0:
-				iterator['rutificador']=distances[0][2]
-				iterator['nombreRutificador'] = distances[0][0]
+	results=[]
+	if response.json()['status']=='success':
+		for x in response.json()['value']:
+			dist=distance.levenshtein(nombre,x['name'])
+			results.append((x['name'],dist,x['rut']))
+		distances=sorted(results, key=lambda palabra: palabra[1])
+		if len(distances)!=0:
+			iterator['rutificador']=distances[0][2]
+			iterator['nombreRutificador'] = distances[0][0]
 	return iterator
 
 
 def main():
-	# This is the main function of the program
+	
 	data={
-	'nombre': 'GARY MEDEL SOTO',
-	'apellido1': 'MEDEL',
-	'apellido2': 'SOTO',
-	'nombres': 'GARY'
+	'nombre': 'GARY MEDEL SOTO'
 	}
 
 	output=getRUT(data)
